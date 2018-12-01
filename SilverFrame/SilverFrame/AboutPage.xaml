@@ -1,0 +1,16 @@
+﻿<Page
+    x:Class="SilverFrame.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SilverFrame"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock HorizontalAlignment="Center" Margin="0,410,0,0" Text="Silver Frame is  windows universal app that serves as a digital picture frame" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,463,0,0" Text="By Joshua Toye and Jhoel Zuniga" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Image HorizontalAlignment="Center" Height="250" Margin="0,110,0,0" VerticalAlignment="Top" Width="250" Source="fram.png"/>
+
+    </Grid>
+</Page>
