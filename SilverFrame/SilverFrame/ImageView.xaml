@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Background="Black">
-        <Image x:Name="RotatingImage" Source="Assets/images/test.JPG" Stretch="Uniform"/>
+        <Image x:Name="RotatingImage"  Stretch="Uniform" />
 
     </Grid>
 </Page>
