@@ -15,7 +15,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ModelLibrary;
 
 namespace SilverFrame
 {
@@ -33,7 +32,7 @@ namespace SilverFrame
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            Model.InitializeDatabase();
+            //Model.InitializeDatabase();
         }
 
         /// <summary>
