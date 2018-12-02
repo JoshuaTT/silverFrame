@@ -1,23 +1,25 @@
-﻿using System;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-
 
 namespace SilverFrame.Model
 {
-    class Model : DbContext
+    public class SilverFrameContext : DbContext
     {
         public DbSet<Picture> Pictures { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=Picture.db");
+            optionsBuilder.UseSqlite("Data Source=pictures.db");
         }
     }
 
     public class Picture
     {
-        public int PictureID { get; set; }
+        public int PictureId { get; set; }
+        public string Url { get; set; }
+
+       
+
     }
+
 }

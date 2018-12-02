@@ -151,6 +151,12 @@
       <Version>6.1.9</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SilverFrame.Model\SilverFrame.Model.csproj">
+      <Project>{930762b5-503f-4cb1-b8ed-42bc7f20dcaf}</Project>
+      <Name>SilverFrame.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

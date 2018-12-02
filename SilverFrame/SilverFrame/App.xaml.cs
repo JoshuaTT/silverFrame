@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SilverFrame.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,6 +33,11 @@ namespace SilverFrame
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            using (var db = new SilverFrameContext())
+            {
+                db.Database.Migrate();
+            }
 
             //Model.InitializeDatabase();
         }

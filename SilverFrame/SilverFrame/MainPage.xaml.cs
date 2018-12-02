@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SilverFrame.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,26 @@ namespace SilverFrame
         private void Info_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AboutPage));
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (var db = new SilverFrameContext())
+            {
+                Pictures.ItemsSource = db.Pictures.ToList();
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            using (var db = new SilverFrameContext())
+            {
+                var picture = new Picture { Url = NewBlogUrl.Text };
+                db.Pictures.Add(picture);
+                db.SaveChanges();
+
+                Pictures.ItemsSource = db.Pictures.ToList();
+            }
         }
 
         private void Show_Click(object sender, RoutedEventArgs e)
