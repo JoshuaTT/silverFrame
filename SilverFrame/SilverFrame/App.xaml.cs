@@ -27,6 +27,7 @@ namespace SilverFrame
     {
         public static new App Current => (App)Application.Current;
 
+        //https://stackoverflow.com/questions/41187629/how-to-check-if-user-is-idle-on-uwp
         public event EventHandler IsIdleChanged;
 
         private DispatcherTimer idleTimer;
@@ -127,6 +128,7 @@ namespace SilverFrame
             }
         }
 
+        //https://stackoverflow.com/questions/41187629/how-to-check-if-user-is-idle-on-uwp
         private void onCoreWindowPointerMoved(CoreWindow sender, PointerEventArgs args)
         {
             idleTimer.Stop();
