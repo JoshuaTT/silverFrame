@@ -80,6 +80,9 @@ namespace SilverFrame
                     if (fileType == ".JPG" || fileType == ".PNG" || fileType == ".GIF")
                     {
                         string filePath = file.Path;
+                        int pathPlace = filePath.IndexOf("Pictures\\");
+                        filePath = filePath.Remove(0, pathPlace + 9);
+
                         //Check if in database
                         List<String> entries = new List<string>();
 
@@ -88,6 +91,7 @@ namespace SilverFrame
                         {
                             db.Open();
 
+                            
                             SqliteCommand selectCommand = new SqliteCommand("SELECT PicturePath FROM Pictures WHERE PicturePath = @filePath", db);
                             selectCommand.Parameters.AddWithValue("filePath", filePath);
 

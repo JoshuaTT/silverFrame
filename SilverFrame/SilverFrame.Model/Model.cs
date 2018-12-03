@@ -18,7 +18,7 @@ namespace SilverFrame.Model
         public int PictureId { get; set; }
         public string PicturePath { get; set; }
         public string Caption { get; set; }
-        public bool include { get; set; }
+        public bool Include { get; set; }
 
        
 

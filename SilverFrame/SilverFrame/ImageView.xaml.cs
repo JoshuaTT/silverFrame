@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -16,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
+
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,90 +29,171 @@ namespace SilverFrame
     /// </summary>
     public sealed partial class ImageView : Page
     {
+        
+
         public ImageView()
         {
             this.InitializeComponent();
             ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
             RotatingImage.Source = new BitmapImage(new Uri("ms-appx:///Assets/images/test.JPG"));
-            handleShowAsync();
+            handleShow();
             //RotatingImage.
         }
 
-        public async System.Threading.Tasks.Task handleShowAsync()
+        private int currentPhotoID;
+        private string currentPhotoPath = "";
+        private string currentPhotoCaption = "";
+        private bool currentPhotoInclude = true;
+        private bool hasFocus;
+
+        public async System.Threading.Tasks.Task handleShow()
         {
-            Uri temp = new Uri("https://m.media-amazon.com/images/M/MV5BMTQ1OTM0NDM1NV5BMl5BanBnXkFtZTgwOTUxOTU2NzE@._V1_SY1000_CR0,0,707,1000_AL_.jpg");
-            await ImageLoader.LoadImage(temp, "bob.jpg");
+            //while (true)
+            //{
+                
 
-            //RotatingImage.Source = new BitmapImage(new Uri("ms-appx:///Assets/images/test2.jpg"));
-            //BitmapImage bi = new BitmapImage();
-            //bi.UriSource = new Uri(@"ms-appx:/Assets/images/test2.jpg", UriKind.RelativeOrAbsolute);
+                // Get the Pictures library
+                Windows.Storage.StorageFolder picturesFolder =
+                    Windows.Storage.KnownFolders.PicturesLibrary;
+                IReadOnlyList<StorageFolder> folders =
+                    await picturesFolder.GetFoldersAsync();
 
-            //Image temp = new Image();
-            //temp.Source = bi;
-            //RotatingImage = temp;
-            //bool pause = true;
+
+                using (SqliteConnection db =
+                                new SqliteConnection("Filename=pictures.db"))
+                {
+                    db.Open();
+                    do
+                    {
+
+                        SqliteCommand selectCommand = new SqliteCommand("SELECT * FROM Pictures ORDER BY RANDOM() LIMIT 1;", db);
+                        SqliteDataReader query = selectCommand.ExecuteReader();
+
+                        while (query.Read())
+                        {
+                            currentPhotoID = query.GetInt32(0);
+                            currentPhotoPath = query.GetString(1);
+
+                            if (!query.IsDBNull(2))
+                                currentPhotoCaption = query.GetString(2);
+                            else
+                                currentPhotoCaption = "";
+                            
+
+                            currentPhotoInclude = query.GetBoolean(3);
+
+                        }
+                    }
+                    while (currentPhotoInclude == false);
+                    db.Close();
+                }
+
+                StorageFile currentFile = await picturesFolder.GetFileAsync(currentPhotoPath);
+                Windows.Storage.Streams.IRandomAccessStream fileStream = await currentFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                Windows.UI.Xaml.Media.Imaging.BitmapImage bmi = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                bmi.SetSource(fileStream);
+            captionBox.Text = currentPhotoCaption;
+                RotatingImage.Source = bmi;
+            CaptionSave.Focus(FocusState.Programmatic);
+            successLabel.Visibility = Visibility.Collapsed;
+            //Thread.Sleep(1500);
+
+            //}
 
         }
 
-        //protected async override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    // Get the Pictures library
-        //    Windows.Storage.StorageFolder picturesFolder =
-        //        Windows.Storage.KnownFolders.PicturesLibrary;
-        //    IReadOnlyList<StorageFolder> folders =
-        //        await picturesFolder.GetFoldersAsync();
+       
+        private void CaptionSave_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
 
 
-        //    using (SqliteConnection db =
-        //                    new SqliteConnection("Filename=pictures.db"))
-        //    {
-        //        db.Open();
+        }
 
-        //        SqliteCommand selectCommand = new SqliteCommand("SELECT* FROM table ORDER BY RANDOM() LIMIT 1;", db);
-        //        .Parameters.AddWithValue("filePath", filePath);
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            App.Current.IsIdleChanged += onIsIdleChanged;
+        }
 
-        //        SqliteDataReader query = selectCommand.ExecuteReader();
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            App.Current.IsIdleChanged -= onIsIdleChanged;
+        }
 
-        //        while (query.Read())
-        //        {
-        //            entries.Add(query.GetString(0));
-        //        }
+        private void onIsIdleChanged(object sender, EventArgs e)
+        {
+            if (!hasFocus)
+            {
+                captionBox.Visibility = Visibility.Collapsed;
+                CaptionSave.Visibility = Visibility.Collapsed;
+            }
 
-        //        db.Close();
-        //    }
+            System.Diagnostics.Debug.WriteLine($"IsIdle: {App.Current.IsIdle}");
+        }
 
-        //    // Process file folders
-        //    foreach (StorageFolder folder in folders)
-        //    {
-        //        // Get and process files in folder
-        //        IReadOnlyList<StorageFile> fileList = await folder.GetFilesAsync();
-        //        foreach (StorageFile file in fileList)
-        //        {
-        //            Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-        //                new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+        private void Grid_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            captionBox.Visibility = Visibility.Visible;
+            CaptionSave.Visibility = Visibility.Visible;
+        }
 
-        //            // Open a stream for the selected file.
-        //            // The 'using' block ensures the stream is disposed
-        //            // after the image is loaded.
-        //            using (Windows.Storage.Streams.IRandomAccessStream fileStream =
-        //                await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
-        //            {
-        //                // Set the image source to the selected bitmap.
-        //                Windows.UI.Xaml.Media.Imaging.BitmapImage bmi =
-        //                    new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-        //                bmi.SetSource(fileStream);
+        private void captionBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            hasFocus = true;
+            successLabel.Visibility = Visibility.Collapsed;
+        }
 
-        //                // Create an Image control.  
-        //                //Image img = new Image();
-        //                //img.Height = 50;
-        //                RotatingImage.Source = bmi;
+        private void captionBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            hasFocus = false;
+        }
 
-        //                // Add the Image control to the UI. 'imageGrid' is a
-        //                // VariableSizedWrapGrid declared in the XAML page.
-        //                //imageGrid.Children.Add(img);
-        //            }
-        //        }
-        //    }
-        //}
+        private void CaptionSave_Click(object sender, RoutedEventArgs e)
+        {
+
+            string captionText = captionBox.Text;
+
+            using (SqliteConnection db = new SqliteConnection("Data Source=pictures.db"))
+            {
+                db.Open();
+
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
+
+                bool include = true;
+                // Use parameterized query to prevent SQL injection attacks
+                insertCommand.CommandText = "UPDATE Pictures Set Caption = @Caption Where PictureId = @id";
+                insertCommand.Parameters.AddWithValue("@Caption", captionText);
+                insertCommand.Parameters.AddWithValue("@id", currentPhotoID);
+
+
+                insertCommand.ExecuteReader();
+
+                db.Close();
+            }
+
+            successLabel.Visibility = Visibility.Visible;
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (SqliteConnection db = new SqliteConnection("Data Source=pictures.db"))
+            {
+                db.Open();
+
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
+
+                bool include = true;
+                // Use parameterized query to prevent SQL injection attacks
+                insertCommand.CommandText = "UPDATE Pictures Set Include = @Include Where PictureId = @id";
+                insertCommand.Parameters.AddWithValue("@Include", false);
+                insertCommand.Parameters.AddWithValue("@id", currentPhotoID);
+
+
+                insertCommand.ExecuteReader();
+
+                db.Close();
+            }
+        }
     }
 }

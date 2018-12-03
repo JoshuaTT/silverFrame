@@ -8,8 +8,23 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="Black">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="DarkSlateGray"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="Black" PointerMoved="Grid_PointerMoved">
         <Image x:Name="RotatingImage"  Stretch="Uniform" />
+        <TextBox x:Name="captionBox" Margin="0,0,88,96"  HorizontalAlignment="Right" Width="194" Height="150" VerticalAlignment="Bottom" 
+                 AcceptsReturn="True" TextWrapping="Wrap" GotFocus="captionBox_GotFocus" LostFocus="captionBox_LostFocus" />
+        <Button x:Name="CaptionSave" Background="Wheat"  Content="Save Caption" HorizontalAlignment="Right" Margin="0,0,87,42" VerticalAlignment="Bottom" Width="195" Height="33" PointerPressed="CaptionSave_PointerPressed" Click="CaptionSave_Click"/>
+        <Button x:Name="RemoveButton" Background="IndianRed" Content="Remove From Slideshow" HorizontalAlignment="Right" Margin="0,72,88,0" VerticalAlignment="Top" Width="194" Click="RemoveButton_Click"/>
+        <TextBlock x:Name="successLabel" Foreground="LightGreen"  Margin="0,0,88,251" Text="Saved!" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Right" Width="194" Height="27" VerticalAlignment="Bottom" />
 
     </Grid>
 </Page>
