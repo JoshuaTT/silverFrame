@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,46 +51,65 @@ namespace SilverFrame
 
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            // Get the Pictures library
-            Windows.Storage.StorageFolder picturesFolder =
-                Windows.Storage.KnownFolders.PicturesLibrary;
-            IReadOnlyList<StorageFolder> folders =
-                await picturesFolder.GetFoldersAsync();
+        //protected async override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    // Get the Pictures library
+        //    Windows.Storage.StorageFolder picturesFolder =
+        //        Windows.Storage.KnownFolders.PicturesLibrary;
+        //    IReadOnlyList<StorageFolder> folders =
+        //        await picturesFolder.GetFoldersAsync();
 
-            // Process file folders
-            foreach (StorageFolder folder in folders)
-            {
-                // Get and process files in folder
-                IReadOnlyList<StorageFile> fileList = await folder.GetFilesAsync();
-                foreach (StorageFile file in fileList)
-                {
-                    Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-                        new Windows.UI.Xaml.Media.Imaging.BitmapImage();
 
-                    // Open a stream for the selected file.
-                    // The 'using' block ensures the stream is disposed
-                    // after the image is loaded.
-                    using (Windows.Storage.Streams.IRandomAccessStream fileStream =
-                        await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
-                    {
-                        // Set the image source to the selected bitmap.
-                        Windows.UI.Xaml.Media.Imaging.BitmapImage bmi =
-                            new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-                        bmi.SetSource(fileStream);
+        //    using (SqliteConnection db =
+        //                    new SqliteConnection("Filename=pictures.db"))
+        //    {
+        //        db.Open();
 
-                        // Create an Image control.  
-                        //Image img = new Image();
-                        //img.Height = 50;
-                        RotatingImage.Source = bmi;
+        //        SqliteCommand selectCommand = new SqliteCommand("SELECT* FROM table ORDER BY RANDOM() LIMIT 1;", db);
+        //        .Parameters.AddWithValue("filePath", filePath);
 
-                        // Add the Image control to the UI. 'imageGrid' is a
-                        // VariableSizedWrapGrid declared in the XAML page.
-                        //imageGrid.Children.Add(img);
-                    }
-                }
-            }
-        }
+        //        SqliteDataReader query = selectCommand.ExecuteReader();
+
+        //        while (query.Read())
+        //        {
+        //            entries.Add(query.GetString(0));
+        //        }
+
+        //        db.Close();
+        //    }
+
+        //    // Process file folders
+        //    foreach (StorageFolder folder in folders)
+        //    {
+        //        // Get and process files in folder
+        //        IReadOnlyList<StorageFile> fileList = await folder.GetFilesAsync();
+        //        foreach (StorageFile file in fileList)
+        //        {
+        //            Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
+        //                new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+
+        //            // Open a stream for the selected file.
+        //            // The 'using' block ensures the stream is disposed
+        //            // after the image is loaded.
+        //            using (Windows.Storage.Streams.IRandomAccessStream fileStream =
+        //                await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+        //            {
+        //                // Set the image source to the selected bitmap.
+        //                Windows.UI.Xaml.Media.Imaging.BitmapImage bmi =
+        //                    new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+        //                bmi.SetSource(fileStream);
+
+        //                // Create an Image control.  
+        //                //Image img = new Image();
+        //                //img.Height = 50;
+        //                RotatingImage.Source = bmi;
+
+        //                // Add the Image control to the UI. 'imageGrid' is a
+        //                // VariableSizedWrapGrid declared in the XAML page.
+        //                //imageGrid.Children.Add(img);
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

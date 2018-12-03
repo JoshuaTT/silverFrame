@@ -64,6 +64,7 @@ namespace SilverFrame
             IReadOnlyList<StorageFolder> folders =
                 await picturesFolder.GetFoldersAsync();
 
+           
             // Process file folders
             foreach (StorageFolder folder in folders)
             {
@@ -83,7 +84,7 @@ namespace SilverFrame
                         List<String> entries = new List<string>();
 
                         using (SqliteConnection db =
-                            new SqliteConnection("Filename=pictures.db"))
+                            new SqliteConnection("Data Source=pictures.db"))
                         {
                             db.Open();
 
@@ -104,7 +105,7 @@ namespace SilverFrame
 
                         if (entries.Count() == 0)
                         {
-                            using (SqliteConnection db = new SqliteConnection("Filename=pictures.db"))
+                            using (SqliteConnection db = new SqliteConnection("Data Source=pictures.db"))
                             {
                                 db.Open();
 
