@@ -12,7 +12,9 @@ namespace SilverFrame.Model.Migrations
                 {
                     PictureId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Url = table.Column<string>(nullable: true)
+                    PicturePath = table.Column<string>(nullable: true),
+                    Caption = table.Column<string>(nullable: true),
+                    include = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

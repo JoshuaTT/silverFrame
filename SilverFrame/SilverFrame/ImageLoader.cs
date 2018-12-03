@@ -11,6 +11,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 public class ImageLoader
 {
+    //https://stackoverflow.com/questions/35807006/get-the-bytes-out-of-an-ibuffer/51027930
+    //https://stackoverflow.com/questions/34603849/download-and-save-a-picture-from-a-url-universal-windows-app/34651181
     public async static Task LoadImage(Uri uri, string filename)
     {
         Windows.Storage.StorageFolder picturesFolder =

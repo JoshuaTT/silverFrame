@@ -145,6 +145,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Google.Apis">
+      <Version>1.36.1</Version>
+    </PackageReference>
+    <PackageReference Include="Google.Apis.Auth">
+      <Version>1.36.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite.Core">
       <Version>2.1.0</Version>
     </PackageReference>
