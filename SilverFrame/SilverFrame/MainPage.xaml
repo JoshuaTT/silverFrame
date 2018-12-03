@@ -10,7 +10,7 @@
     Loaded="Page_Loaded">
 
     <Grid>
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" MinWidth="600" MinHeight="600">
             <StackPanel>
                 <TextBox Name="NewBlogUrl"></TextBox>
                 <Button Click="Add_Click">Add</Button>
@@ -25,9 +25,9 @@
         </Grid>
 
 
-        <Button Content="Show" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" Width="75" Click="Show_Click"/>
-        <Button Content="Add" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Info" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Width="75" Click="Info_Click"/>
+        <Button Content="Show" HorizontalAlignment="Stretch" Margin="475,250,474,0" VerticalAlignment="Top" Click="Show_Click" Height="32"/>
+        <Button Content="Add" HorizontalAlignment="Stretch" Margin="475,300,474,0" VerticalAlignment="Top" Height="32"/>
+        <Button Content="Info" HorizontalAlignment="Stretch" Margin="475,350,474,0" VerticalAlignment="Top" Click="Info_Click" Height="32"/>
 
     </Grid>
 </Page>
