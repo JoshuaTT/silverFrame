@@ -8,7 +8,7 @@ using SilverFrame.Model;
 namespace SilverFrame.Model.Migrations
 {
     [DbContext(typeof(SilverFrameContext))]
-    [Migration("20181202220256_InitialCreate")]
+    [Migration("20181203013009_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,11 @@ namespace SilverFrame.Model.Migrations
                     b.Property<int>("PictureId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Url");
+                    b.Property<string>("Caption");
+
+                    b.Property<string>("PicturePath");
+
+                    b.Property<bool>("include");
 
                     b.HasKey("PictureId");
 

@@ -20,7 +20,11 @@ namespace SilverFrame.Model.Migrations
                     b.Property<int>("PictureId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Url");
+                    b.Property<string>("Caption");
+
+                    b.Property<string>("PicturePath");
+
+                    b.Property<bool>("include");
 
                     b.HasKey("PictureId");
 
