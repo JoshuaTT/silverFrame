@@ -29,7 +29,7 @@ namespace SilverFrame
     /// </summary>
     public sealed partial class ImageView : Page
     {
-        
+
 
         public ImageView()
         {
@@ -40,69 +40,87 @@ namespace SilverFrame
             //RotatingImage.
         }
 
+
+        private async void handleShow()
+        {
+            while (true)
+            {
+                await Task.Run(() =>
+                {
+                    if (!hasFocus)
+                    {
+                        changePicture();
+                        Thread.Sleep(5000);
+                    }
+                });
+                
+            }
+
+        }
+
         private int currentPhotoID;
         private string currentPhotoPath = "";
         private string currentPhotoCaption = "";
         private bool currentPhotoInclude = true;
         private bool hasFocus;
 
-        public async System.Threading.Tasks.Task handleShow()
+        private async void changePicture()
         {
-            //while (true)
-            //{
-                
-
-                // Get the Pictures library
-                Windows.Storage.StorageFolder picturesFolder =
-                    Windows.Storage.KnownFolders.PicturesLibrary;
-                IReadOnlyList<StorageFolder> folders =
-                    await picturesFolder.GetFoldersAsync();
 
 
-                using (SqliteConnection db =
-                                new SqliteConnection("Filename=pictures.db"))
+            // Get the Pictures library
+            Windows.Storage.StorageFolder picturesFolder =
+                Windows.Storage.KnownFolders.PicturesLibrary;
+            IReadOnlyList<StorageFolder> folders =
+                await picturesFolder.GetFoldersAsync();
+
+
+            using (SqliteConnection db =
+                            new SqliteConnection("Filename=pictures.db"))
+            {
+                db.Open();
+                do
                 {
-                    db.Open();
-                    do
+
+                    SqliteCommand selectCommand = new SqliteCommand("SELECT * FROM Pictures ORDER BY RANDOM() LIMIT 1;", db);
+                    SqliteDataReader query = selectCommand.ExecuteReader();
+
+                    while (query.Read())
                     {
+                        currentPhotoID = query.GetInt32(0);
+                        currentPhotoPath = query.GetString(1);
 
-                        SqliteCommand selectCommand = new SqliteCommand("SELECT * FROM Pictures ORDER BY RANDOM() LIMIT 1;", db);
-                        SqliteDataReader query = selectCommand.ExecuteReader();
+                        if (!query.IsDBNull(2))
+                            currentPhotoCaption = query.GetString(2);
+                        else
+                            currentPhotoCaption = "";
 
-                        while (query.Read())
-                        {
-                            currentPhotoID = query.GetInt32(0);
-                            currentPhotoPath = query.GetString(1);
 
-                            if (!query.IsDBNull(2))
-                                currentPhotoCaption = query.GetString(2);
-                            else
-                                currentPhotoCaption = "";
-                            
+                        currentPhotoInclude = query.GetBoolean(3);
 
-                            currentPhotoInclude = query.GetBoolean(3);
-
-                        }
                     }
-                    while (currentPhotoInclude == false);
-                    db.Close();
                 }
+                while (currentPhotoInclude == false);
+                db.Close();
+            }
 
-                StorageFile currentFile = await picturesFolder.GetFileAsync(currentPhotoPath);
-                Windows.Storage.Streams.IRandomAccessStream fileStream = await currentFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            StorageFile currentFile = await picturesFolder.GetFileAsync(currentPhotoPath);
+            Windows.Storage.Streams.IRandomAccessStream fileStream = await currentFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
                 Windows.UI.Xaml.Media.Imaging.BitmapImage bmi = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
                 bmi.SetSource(fileStream);
-            captionBox.Text = currentPhotoCaption;
+                captionBox.Text = currentPhotoCaption;
                 RotatingImage.Source = bmi;
-            CaptionSave.Focus(FocusState.Programmatic);
-            successLabel.Visibility = Visibility.Collapsed;
-            //Thread.Sleep(1500);
-
-            //}
+                CaptionSave.Focus(FocusState.Programmatic);
+                successLabel.Visibility = Visibility.Collapsed;
+            });
+            
 
         }
 
-       
+
         private void CaptionSave_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
 
@@ -125,6 +143,7 @@ namespace SilverFrame
             {
                 captionBox.Visibility = Visibility.Collapsed;
                 CaptionSave.Visibility = Visibility.Collapsed;
+                RemoveButton.Visibility = Visibility.Collapsed;
             }
 
             System.Diagnostics.Debug.WriteLine($"IsIdle: {App.Current.IsIdle}");
@@ -134,6 +153,7 @@ namespace SilverFrame
         {
             captionBox.Visibility = Visibility.Visible;
             CaptionSave.Visibility = Visibility.Visible;
+            RemoveButton.Visibility = Visibility.Visible;
         }
 
         private void captionBox_GotFocus(object sender, RoutedEventArgs e)
@@ -194,6 +214,8 @@ namespace SilverFrame
 
                 db.Close();
             }
+
+            changePicture();
         }
     }
 }
