@@ -31,6 +31,7 @@ namespace SilverFrame
         {
             this.InitializeComponent();
             updateDatabase();
+
         }
 
         private void Info_Click(object sender, RoutedEventArgs e)
@@ -40,7 +41,7 @@ namespace SilverFrame
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-           
+            
         }
 
         //private void Add_Click(object sender, RoutedEventArgs e)
