@@ -10,9 +10,8 @@
     Loaded="Page_Loaded">
 
     <Grid Background="Silver">
-        <Button Content="Show" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" Width="258" Click="Show_Click" Height="32"/>
-        <Button Content="Add" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="257" Height="31"/>
-        <Button Content="Info" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Width="258" Click="Info_Click"/>
+        <Button Content="Show" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" Width="258" Click="Show_Click" Height="61"/>
+        <Button Content="Info" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Width="258" Click="Info_Click" RenderTransformOrigin="0.521,-0.493"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Center" Margin="0,106,0,0" Text="Silver Frame" FontSize="48pt" FontFamily="Engravers MT" Foreground="Azure"
                    TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Height="67" Width="594"/>
 

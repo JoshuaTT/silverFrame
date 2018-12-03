@@ -30,7 +30,7 @@ namespace SilverFrame
         public MainPage()
         {
             this.InitializeComponent();
-            updateDatabase();
+            updateDatabaseHandler();
 
         }
 
@@ -42,6 +42,18 @@ namespace SilverFrame
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private async void updateDatabaseHandler()
+        {
+            while (true)
+            {
+                await Task.Run(() =>
+                {
+                    updateDatabase();
+                });
+
+            }
         }
 
         //private void Add_Click(object sender, RoutedEventArgs e)
@@ -56,7 +68,7 @@ namespace SilverFrame
         //    }
         //}
 
-        private async Task updateDatabase()
+        private async void updateDatabase()
         {
             // Get the Pictures library
             Windows.Storage.StorageFolder picturesFolder =
