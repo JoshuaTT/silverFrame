@@ -84,8 +84,14 @@ namespace SilverFrame
                 IReadOnlyList<StorageFile> fileList = await folder.GetFilesAsync();
                 foreach (StorageFile file in fileList)
                 {
-                    Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-                        new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
+                         new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                    });
+
+                    
 
                     string fileType = file.FileType;
 
